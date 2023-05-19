@@ -1,6 +1,6 @@
 const express=require('express')
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 5000;
@@ -30,7 +30,31 @@ async function run() {
     const productCollection= client.db('toyboxDB').collection('products');
 
 
+// post
+   app.post('/addedProduct',async(req, res)=>{
+    const product=req.body;
+    // console.log(product)
+    const result =await productCollection.insertOne(product)
+    // console.log(result)
+    res.send(result)
 
+   })
+
+//    get
+    
+    app.get('/allProducts',async(req, res)=>{
+        const result = await productCollection.find().toArray();
+        res.send(result)
+    })
+
+    app.get('/productDetails/:id',async(req, res)=>{
+        const id=req.params.id;
+        console.log(id)
+        const filter= {_id: new ObjectId(id)}
+        const result = await productCollection.findOne(filter)
+        // const result=await productCollection.find
+        res.send(result)
+    })
 
 
     // Send a ping to confirm a successful connection
