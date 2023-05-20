@@ -83,6 +83,23 @@ async function run() {
 
     })
 
+    app.put('/myToyUpdate/:id',async(req, res)=>{
+      const id=req.params.id;
+      const filter={_id: new ObjectId(id)}
+      const options={upsert:true};
+      const updatedToy=req.body
+      console.log(updatedToy)
+      const myToyUpdate={
+        $set:{
+          price:updatedToy.price,
+          available_quantity:updatedToy.available_quantity,
+          description:updatedToy.description
+
+        }
+      }
+      const result=await productCollection.updateOne(filter,myToyUpdate ,options)
+      res.send(result)
+    })
 
 
     // create index
