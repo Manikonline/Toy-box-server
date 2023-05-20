@@ -60,7 +60,8 @@ async function run() {
     app.get('/myToys/:email',async(req, res)=>{
        
        console.log(req.params.email)
-        const result = await productCollection.find({ email: req.params.email}).toArray()
+       
+        const result = await productCollection.find({ email: req.params.email}).sort({price:1}).collation({locale:"en_US",numericOrdering:true}).toArray()
         res.send(result)
    
     })
