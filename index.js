@@ -57,6 +57,32 @@ async function run() {
     })
 
 
+    app.get('/myToys/:email',async(req, res)=>{
+       
+       console.log(req.params.email)
+        const result = await productCollection.find({ email: req.params.email}).toArray()
+        res.send(result)
+   
+    })
+
+
+    // create index
+    const indexKeys={toyName:1};
+    const indexOptions={name:'toyName'}
+
+    const result = await productCollection.createIndex(indexKeys,indexOptions)
+
+    app.get('/toySearchBytoyName/:text',async(req,res)=>{
+      const searchToy=req.params.text;
+      const result =await productCollection.find({
+        $or:[
+          {toyName:{$regex :searchToy, $options:"i"}}
+        ]
+      }).toArray();
+      res.send(result)
+    })
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
