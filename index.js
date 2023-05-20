@@ -66,6 +66,13 @@ async function run() {
    
     })
 
+    app.get('/subProducts',async(req, res)=>{
+        console.log(req.query.subCategory)
+        
+        const query= await productCollection.find({subCategory:req.query.subCategory}).toArray()
+        res.send(query)
+    })
+
     // delete
     app.delete('/myToys/:id', async(req, res)=>{
       const id= req.params.id;
